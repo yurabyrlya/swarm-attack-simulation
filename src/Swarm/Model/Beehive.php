@@ -3,7 +3,9 @@
 
 namespace App\Swarm\Model;
 
+
 use phpDocumentor\Reflection\Types\This;
+use function Symfony\Component\String\b;
 
 /**
  * Class Beehive
@@ -51,14 +53,43 @@ class Beehive implements BeehiveInterface
 
     /**
      * @inheritDoc
-     * @param Bee $bee
+     * @param BeeInterface $bee
      * @return $this|BeehiveInterface
      */
-    public function addBee(Bee $bee): BeehiveInterface
+    public function addBee(BeeInterface $bee): BeehiveInterface
     {
         array_push($this->bees, $bee);
         return $this;
     }
 
+    /**
+     * @return BeeInterface
+     */
+    public function getRandomBee(): BeeInterface
+    {
+        $id = rand(0, count($this->bees) - 1);
+        return $this->bees[$id];
+    }
+
+    public function getQueen() : ?BeeInterface{
+
+        foreach ($this->bees as $bee) {
+                /**
+                 * @var  Bee $bee
+                 */
+                if ($bee->getRole() === Bee::QUEEN_CODE) return $bee;
+
+        }
+        return null;
+    }
+
+    function unsetDiedBee( Bee $bee, $strict = TRUE)
+    {
+        $key = array_search($bee, $this->bees, $strict);
+        unset($this->bees[$key]);
+        $this->bees = array_values($this->bees);
+        return $bee;
+
+    }
 }
 

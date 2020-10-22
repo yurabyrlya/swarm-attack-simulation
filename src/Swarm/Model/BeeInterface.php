@@ -27,9 +27,14 @@ interface BeeInterface
     public function setHealth(int $health);
 
     /**
-     * @param int $damage
+     * @return int;
      */
-    public function setDamage(int $damage);
+    public function getHealth():int;
+
+    /**
+     * @param array $damage
+     */
+    public function setDamage(array $damage);
 
     /**
      * @return int

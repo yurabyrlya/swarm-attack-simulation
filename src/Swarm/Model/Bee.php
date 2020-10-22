@@ -4,14 +4,21 @@
 namespace App\Swarm\Model;
 
 
-use phpDocumentor\Reflection\Types\This;
-
 class Bee implements BeeInterface
 {
 
-    public const QUEEN = 1;
-    public const WORKER = 2;
-    public const WARRIOR = 3;
+    public const QUEEN_CODE = 1;
+    public const QUEEN_HEALTH = 50;
+    public const QUEEN_DAMAGE = [1];
+
+    public const WORKER_CODE = 2;
+    public const WORKER_HEALTH = 5;
+    public const WORKER_DAMAGE = [2,3,4];
+
+    public const WARRIOR_CODE = 3;
+    public const WARRIOR_HEALTH = 10;
+    public const WARRIOR_DAMAGE = [4,5,6,7];
+
 
     /**
      * unique Id of any Bee
@@ -68,11 +75,12 @@ class Bee implements BeeInterface
 
     /**
      * @param int $id
-     * @return int
+     * @return Bee
      */
-    public function setId(int $id): int
+    public function setId(int $id)
     {
-        return $this->id = $id;
+        $this->id = $id;
+        return $this;
 
     }
 
@@ -95,7 +103,8 @@ class Bee implements BeeInterface
     }
 
     /**
-     * @return mixed
+     * return the random damage
+     * @return int
      */
     public function getDamage():int
     {
@@ -103,13 +112,22 @@ class Bee implements BeeInterface
     }
 
     /**
-     * @param int $damage
+     * @param array $damage
      * @return Bee
      */
-    public function setDamage(int $damage)
+    public function setDamage(array $damage)
     {
+       $damage =  rand(min($damage) , max($damage));
         $this->damage = $damage;
         return $this;
     }
 
+    /**
+     * if the Bee is not died
+     * @return bool
+     */
+    public function isAlive()
+    {
+        return true ? $this->getHealth() > 0 : false;
+    }
 }
