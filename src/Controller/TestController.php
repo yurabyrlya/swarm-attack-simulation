@@ -28,8 +28,7 @@ class TestController extends AbstractController
      */
     public function index()
     {
-        return $this->render('test/index.html.twig',
-            ['data' => json_encode($this->swarmAttack->SimulateAttack())] );
+        return $this->render('test/index.html.twig');
     }
 
     /**
