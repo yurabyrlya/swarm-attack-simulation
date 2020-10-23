@@ -25,5 +25,5 @@ interface BeehiveInterface
     /**
      * @return BeeInterface
      */
-    public function getRandomBee():BeeInterface;
+    public function getRandomBee():?BeeInterface;
 }

@@ -82,12 +82,19 @@ class WarBeesManager implements WarBeesManagerInterface
             $bee = $this->beehive->getRandomBee();
             $enemyBee = $this->enemyBeehive->getRandomBee();
 
+            if (is_null($enemyBee)) {
+                $this->warData['won'] = $this->beehive->getName();
+                return $this;
+            }
+            if (is_null($bee)) {
+                $this->warData['won'] = $this->enemyBeehive->getName();
+                return $this;
+            }
             $this->fight($bee , $enemyBee);
 
         }
-
-        if (!$queen->isAlive()) $this->warData['Won'] = $this->enemyBeehive->getName();
-        if (!$enemyQueen->isAlive()) $this->warData['Won'] = $this->beehive->getName();
+        if ($queen->isAlive() === false) $this->warData['won'] = $this->enemyBeehive->getName();
+        if ($enemyQueen->isAlive() === false) $this->warData['won'] = $this->beehive->getName();
 
         return $this;
     }
@@ -100,7 +107,7 @@ class WarBeesManager implements WarBeesManagerInterface
     private function getDataPattern(Bee $bee , Bee $enemyBee){
 
         $time = new \DateTime('now');
-        $time = $time->format('Y-m-d H:i:s');
+        $time = $time->format('Y-m-d H:i: s.u');
         return [
             'fight_id' => uniqid(),
             'date_fight' => $time,
@@ -108,5 +115,5 @@ class WarBeesManager implements WarBeesManagerInterface
             'enemy_bee' => [ 'damage' => $enemyBee->getDamage() ,'health_before' => $enemyBee->getHealth(), 'role' => $enemyBee->getRole()]
         ];
     }
-
 }
+

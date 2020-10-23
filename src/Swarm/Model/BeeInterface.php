@@ -19,7 +19,7 @@ interface BeeInterface
      * Role Of Bee Must be (Queen = 1|Worker = 2|Warrior = 3)
      * @param int $role
      */
-    public function SetRole(int $role);
+    public function setRole(int $role);
 
     /**
      * @param int $health

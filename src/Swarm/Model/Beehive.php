@@ -65,10 +65,14 @@ class Beehive implements BeehiveInterface
     /**
      * @return BeeInterface
      */
-    public function getRandomBee(): BeeInterface
+    public function getRandomBee(): ?BeeInterface
     {
-        $id = rand(0, count($this->bees) - 1);
-        return $this->bees[$id];
+        $id = count($this->bees);
+
+        if ($id == 0)  return null ;
+
+        $id = rand(0, $id - 1);
+        return  $this->bees[$id];
     }
 
     public function getQueen() : ?BeeInterface{

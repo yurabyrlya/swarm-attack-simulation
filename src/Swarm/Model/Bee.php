@@ -51,7 +51,7 @@ class Bee implements BeeInterface
     /**
      * @inheritDoc
      */
-    public function SetRole(int $role)
+    public function setRole(int $role)
     {
         $this->role = $role;
         return $this;

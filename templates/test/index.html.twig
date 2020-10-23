@@ -1,70 +1,84 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Swarm Attack Simulation!{% endblock %}
 
-{% block title %}Swarm Attack  simulation!{% endblock %}
 {% block body %}
+<div class="container">
+    <h1> Swarm Attack Simulation! </h1>
+</div>
+<div class="container">
+    <div class="row col-sm-12 ">
+        <div id="app">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Fight ID</th>
+                        <th scope="col">Bee</th>
+                        <th scope="col">Enemy Bee</th>
+                        <th scope="col">Time Fight</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% verbatim %}
+                    <tr class="text-center">
+                        <td colspan="4" class="text-success h3"> Won Beehive : "{{winner}}"</td>
+                     </tr>
+                     <tr class="text-center">
+                        <td colspan="4" class="h2"> <button  id="update" class="btn btn-danger " v-on:click="update">Generate a new fight </button></td>
+                     </tr>
+                    <tr  v-for="fight in dataWar">
+                        <th scope="row"> {{fight.fight_id}}</th>
+                        <td>
+                             Damage:  {{fight.bee.damage}} <br>
+                             Role:  {{roles[fight.bee.role]}} <br>
+                             Health before fight:  {{fight.bee.health_before}} <br>
+                             Health after fight:  <span class="text-danger">{{fight.bee.health_after_fight}} </span> <br>
+                        </td>
+                        <td>
+                             Damage:  {{fight.enemy_bee.damage}} <br>
+                             Role:  {{roles[fight.enemy_bee.role]}} <br>
+                             Health before fight:  {{fight.enemy_bee.health_before}} <br>
+                             Health after fight:  <span class="text-danger">  {{fight.enemy_bee.health_after_fight}} </span> <br>
+                        </td>
+                        <td>{{fight.date_fight}}</td>
+                    </tr>
+                    {% endverbatim %}
+                </tbody>
+            </table>
+       </div>
+   </div>
+</div>
 
-    <div class="container">
-        <h1> Swarm Attack</h1>
-    </div>
-  <div class="container">
-            <div class="row">
-               <div id="app">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">Fight ID</th>
-                            <th scope="col">Bee</th>
-                            <th scope="col">Enemy Bee</th>
-                            <th scope="col">Time Fight</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% verbatim %}
-                            <tr class="text-center">
-                                    <td  colspan="4" class="text-success h3"> Won Beehive : "{{dataWar.Won}}" </td>
-                             </tr>
+{% endblock %}
 
-                            <tr  v-for="fight in dataWar">
-                              <th scope="row"> {{fight.fight_id}}</th>
-                                <td>
-                                 Damage:  {{fight.bee.damage}} <br>
-                                 Health before fight:  {{fight.bee.health_before}} <br>
-                                 Health after fight:  <span class="text-danger">{{fight.bee.health_after_fight}} </span> <br>
-                                 Role:  {{fight.bee.role}} <br>
-                                </td>
-                                <td>
-                                 Damage:  {{fight.enemy_bee.damage}} <br>
-                                 Health before fight:  {{fight.enemy_bee.health_before}} <br>
-                                 Health after fight:  <span class="text-danger">  {{fight.enemy_bee.health_after_fight}} </span> <br>
-                                 Role:  {{fight.enemy_bee.role}} <br>
-                                </td>
-                                <td>{{fight.date_fight}}</td>
-
-                        </tr>
-                       {% endverbatim %}
-                        </tbody>
-                    </table>
-               </div>
-           </div>
-        </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script>
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js" integrity="sha512-quHCp3WbBNkwLfYUMd+KwBAgpVukJu5MncuQaWXgCrfgcxCJAq/fo+oqrRKOj+UKEmyMCG3tb8RB63W+EmrOBg==" crossorigin="anonymous"></script>
     <script type="text/javascript">
-            var app = new Vue({
-                el: '#app',
-                props: [
-                    'data'
-                ],
-                data: {
-                    dataWar: {},
-                    winner : '',
-                    }
-            });
-            axios.get('/data')
-                .then((response) => {
-                    app.dataWar = response.data;
-                });
-
+        let app = new Vue({
+            el: '#app',
+            data: {
+                dataWar: {},
+                winner : '',
+                roles: {
+                    1: 'Queen',
+                    2: 'Worker',
+                    3: 'Warrior'
+                }
+            },
+            methods:{
+                update: function () {
+                    let that = this;
+                    axios.get('/data')
+                        .then((response) => {
+                            that.dataWar = response.data;
+                            that.winner = response.data.won
+                        });
+                }
+            }
+        });
+        $('#update').click();
     </script>
+
 {% endblock %}
